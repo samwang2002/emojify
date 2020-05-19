@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>emojify</title>
+	<style>
+		body {
+			background-color: #ffc83d;
+			padding: 20px;
+			font-family: "Arial Rounded MT Bold", sans-serif;
+			font-weight: bold;
+			font-size: 20px;
+		}
+
+		#header {
+			margin: auto;
+			width: 500px;
+			max-width: 90%;
+			text-align: center;
+			color: #314cb6;
+		}
+
+		#logo {
+			width: 400px;
+			max-width: 100%;
+		}
+
+		#uploadContainer {
+			width: 650px;
+			height: 100px;
+			max-width: 100%;
+			border: 1px solid;
+			border-radius: 10px;
+			margin: 15px auto;
+			background-color: white;
+			overflow: hidden;
+			display: flex;
+			flex-wrap: nowrap;
+			justify-content: center;
+		}
+
+		@media (max-width: 550px) {
+			#uploadContainer {
+				flex-wrap: wrap;
+				height: 250px;
+			}
+
+			#imgInput + label {
+				width: 100% !important;
+				height: 30px !important;
+				display: inline !important;
+				line-height: 30px;
+				padding: 10px !important;
+			}
+
+			.rangeWrap:first-of-type {
+				top: -22px;
+			}
+
+			.rangeWrap {
+				top: -12px;
+				margin: 12px 30px !important;
+			}
+		}
+
+		#imgInput {
+			width: 0.1px;
+			height: 0.1px;
+			opacity: 0;
+			overflow: hidden;
+			position: absolute;
+			z-index: -1;
+		}
+
+		#imgInput + label {
+			cursor: pointer;
+			background-color: #ff007f;
+			color: white;
+			text-align: center;
+			padding: 30px;
+			display: flex;
+			align-items: center;
+		}
+
+		#imgInput + label:hover {
+			background-color: #cc0059;
+		}
+
+		.rangeWrap {
+			position: relative;
+			width: 100%;
+			margin: 8px 30px 8px 20px;
+			text-align: center;
+			padding-top: 5px;
+		}
+
+		.rangeWrap:first-of-type {
+			margin: 8px 20px 8px 30px;
+		}
+
+		.slider {
+			width: 100%;
+		}
+
+		.bubble {
+			background: #ff007f;
+			color: white;
+			padding: 4px 8px;
+			position: absolute;
+			border-radius: 4px;
+			transform: translateX(-50%);
+		}
+
+		.bubble::after {
+			content: "";
+			position: absolute;
+			width: 2px;
+			height: 2px;
+			background: red;
+			top: -1px;
+			left: 50%;
+		}
+
+		#imgDisplay {
+			background-color: white;
+			width: 800px;
+			max-width: 100%;
+			height: 60vh;
+			border: 1px solid;
+			text-align: center;
+			margin: 25px auto;
+		}
+
+		#downloadButton {
+			margin: 10px auto 50px auto;
+			display: flex;
+			justify-content: center;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="header">
+		<img src="images/emojify-logo.png" id="logo" /><br>
+		turn any image into a masterpiece of emoji artwork!
+	</div>
+
+
+	<div id="uploadContainer">
+		<input type="file" accept="image/*" id="imgInput" onchange="displayImage()">
+		<label for="imgInput">choose image</label>
+
+		<div class="rangeWrap">
+			<label for="emojiCountSlider">Emoji count:</label>
+			<input type="range" class="slider" id="emojiCountSlider" min="0" max="4" step="1" value="2">
+			<output for="emojiCountSlider" class="bubble">2000</output>
+		</div>
+
+		<div class="rangeWrap">
+			<label for="emojiSizeSlider">Emoji size:</label>
+			<input type="range" class="slider" id="emojiSizeSlider" min="0" max="3" step="1" value="2">
+			<output for="emojiSizeSlider" class="bubble">16px</output>
+		</div>
+	</div>
+
+	<div>
+		<button onclick="emojify()">Emojify</button>
+
+		<datalist id="count">
+			<option value="0"></option>
+			<option value="1"></option>
+			<option value="2"></option>
+			<option value="3"></option>
+			<option value="4"></option>
+		</datalist>
+		<datalist id="size">
+			<option value="0"></option>
+			<option value="1"></option>
+			<option value="2"></option>
+			<option value="3"></option>
+		</datalist>
+	</div>
+
+	<div id="imgDisplay">
+		Image Preview
+	</div>
+
+	<button id="downloadButton" onclick="downloadImage()" disabled>Download</button>
+
+	<script type="text/javascript">
+
+		const countSliderValues = [500, 1000, 2000, 4000, 8000];
+		const sizeSliderValues = [4, 8, 16, 32];
+
+		let allRanges = document.querySelectorAll(".rangeWrap");
+		allRanges.forEach(wrap => {
+			let slider = wrap.querySelector(".slider");
+			let bubble = wrap.querySelector(".bubble");
+			slider.addEventListener("input", () => {
+				updateBubble(slider, bubble);
+			});
+			updateBubble(slider, bubble);
+		});
+
+		window.addEventListener("resize", function() {
+			allRanges.forEach(wrap => {
+				let slider = wrap.querySelector(".slider");
+				let bubble = wrap.querySelector(".bubble");
+				updateBubble(slider, bubble);
+			})
+		})
+
+		function updateBubble(slider, bubble) {
+			var val = countSliderValues[slider.value];
+			let x = (slider.value/slider.max) * (slider.clientWidth-12) + 6;
+			if (slider.id == "emojiSizeSlider") {
+				val = sizeSliderValues[slider.value] + "px";
+			}
+			bubble.innerHTML = val;
+			bubble.style.left = x + "px";
+		}
+
+		function displayImage()
+		{
+			document.getElementById("downloadButton").disabled = true;
+			let filesSelected = document.getElementById("imgInput").files;
+
+			if (filesSelected.length > 0)
+			{
+				let fileToLoad = filesSelected[0];
+				let fileReader = new FileReader();
+				fileReader.readAsDataURL(fileToLoad);
+
+				fileReader.onload = function(e) {
+					let image = document.createElement("img");
+					image.src = e.target.result;
+					image.onload = function() {
+						let dimensions = getImageSize(image);
+						document.getElementById("imgDisplay").style.width = dimensions[0] + "px";
+						document.getElementById("imgDisplay").style.height = dimensions[1] + "px";
+						image.style.width = "100%";
+						image.style.height = "100%";
+					}
+
+					document.getElementById("imgDisplay").innerHTML = "";
+					document.getElementById("imgDisplay").appendChild(image);
+				}
+			}
+		}
+
+		function getImageSize(image)
+		{
+			let emojiCount = countSliderValues[document.getElementById("emojiCountSlider").value];
+			let emojiSize = sizeSliderValues[document.getElementById("emojiSizeSlider").value];
+			let imageWidth = image.width;
+			let imageHeight = image.height;
+			let factor = Math.sqrt((imageWidth*imageHeight) / (emojiCount));
+			let w = Math.round(imageWidth/factor) * emojiSize;
+			let h = Math.round(imageHeight/factor) * emojiSize;
+			return [w, h];
+		}
+
+		function loadEmojis(ref, data, levels, display)
+		{
+			var loadedCount = 0;
+			for (var i = 0; i < data.length/4; i++) {
+				let emoji = new Image();
+				const r = data[i*4];
+				const g = data[i*4+1];
+				const b = data[i*4+2];
+				const rs = Math.floor(r*levels/256);
+				const gs = Math.floor(g*levels/256);
+				const bs = Math.floor(b*levels/256);
+				const src = ref[levels*levels*rs + levels*gs + bs];
+				emoji.src = "emojis/" + src;
+				const t = i;
+				emoji.onload = function() {
+					display(emoji, t);
+					loadedCount++;
+					if (loadedCount == data.length/4) {
+						document.getElementById("downloadButton").disabled = false;
+					}
+				}
+			}
+		}
+
+		async function loadRef(source)
+		{
+			const lines = await fetch(source).then(response => response.text().then(text => text.split(/\r|\n/)));
+			return lines;
+		}
+
+		function emojify()
+		{
+			// check that files are selected
+			var filesSelected = document.getElementById("imgInput").files;
+			if (filesSelected.length === 0) {
+				return;
+			}
+			var imageFile = filesSelected[0];
+
+			// create template canvas
+			var canvas = document.createElement("canvas");
+			var context = canvas.getContext("2d");
+
+			// load image
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(imageFile);
+
+			fileReader.onload = function(e) {
+				var image = new Image();
+				image.src = e.target.result;
+
+				// resize image
+				const pixelCount = countSliderValues[document.getElementById("emojiCountSlider").value];
+				const scaleFactor = Math.sqrt((image.width * image.height) / pixelCount);
+				canvas.width = Math.round(image.width / scaleFactor);
+				canvas.height = Math.round(image.height / scaleFactor);
+				context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+				// get data from template canvas
+				const data = context.getImageData(0, 0, canvas.width, canvas.height).data;
+
+				// create new canvas
+				var c = document.createElement("canvas");
+				var ctx = c.getContext("2d");
+				const emojiSize = sizeSliderValues[document.getElementById("emojiSizeSlider").value];
+				c.width = canvas.width * emojiSize;
+				c.height = canvas.height * emojiSize;
+
+				// black background color
+				ctx.fillStyle = "black";
+				ctx.fillRect(0, 0, c.width, c.height);
+
+				// load reference and draw images
+				const levels = 32;
+				const source = "https://raw.githubusercontent.com/samwang2002/samwang2002.github.io/master/ref.txt";
+				loadRef(source)
+					.then(ref => loadEmojis(ref, data, levels, function(emoji, count) {
+						const x = emojiSize * (count%canvas.width);
+						const y = emojiSize * Math.floor(count/canvas.width);
+						ctx.drawImage(emoji, x, y, emojiSize, emojiSize);
+					}));
+
+				// replace image with canvas
+				document.getElementById("imgDisplay").innerHTML = "";
+				document.getElementById("imgDisplay").appendChild(c);
+			};
+		}
+
+		function downloadImage()
+		{
+			let canvas = document.getElementById("imgDisplay").childNodes[0];
+			let url = canvas.toDataURL("image/png");
+			console.log(url);
+
+			// create invisible download link
+			let downloadLink = document.createElement("a");
+			downloadLink.setAttribute("download", "image.png");
+			downloadLink.setAttribute("href", url);
+			downloadLink.click();
+		}
+
+	</script>
+
+</body>
+
+</html>
