@@ -29,9 +29,9 @@
 			width: 650px;
 			height: 100px;
 			max-width: 100%;
-			border: 1px solid;
+			border: 2px solid black;
 			border-radius: 10px;
-			margin: 15px auto;
+			margin: 10px auto;
 			background-color: white;
 			overflow: hidden;
 			display: flex;
@@ -51,6 +51,7 @@
 				display: inline !important;
 				line-height: 30px;
 				padding: 10px !important;
+				border: none !important;
 			}
 
 			.rangeWrap:first-of-type {
@@ -80,6 +81,7 @@
 			padding: 30px;
 			display: flex;
 			align-items: center;
+			border-right: 2px solid black;
 		}
 
 		#imgInput + label:hover {
@@ -89,17 +91,44 @@
 		.rangeWrap {
 			position: relative;
 			width: 100%;
-			margin: 8px 30px 8px 20px;
+			margin: 8px 30px 8px 25px;
 			text-align: center;
 			padding-top: 5px;
 		}
 
 		.rangeWrap:first-of-type {
-			margin: 8px 20px 8px 30px;
+			margin: 8px 25px 8px 30px;
 		}
 
 		.slider {
+			-webkit-appearance: none;
+			appearance: none;
 			width: 100%;
+			height: 10px;
+			border: 2px solid black;
+			border-radius: 10px;
+			background: linear-gradient(to right, red 0%, red 50%, black 50%, black 100%);
+		}
+
+		.slider:focus {
+			outline: none;
+		}
+
+		.slider::-webkit-slider-runnable-track {
+			cursor: pointer;
+		}
+
+		.slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			width: 20px;
+			height: 20px;
+			border: 2px solid black;
+			border-radius: 10px;
+			background-color: #ff007f;
+		}
+
+		.slider::-webkit-slider-thumb:hover {
+			transform: scale(1.2);
 		}
 
 		.bubble {
@@ -109,33 +138,68 @@
 			position: absolute;
 			border-radius: 4px;
 			transform: translateX(-50%);
+			top: 55px;
 		}
 
 		.bubble::after {
 			content: "";
 			position: absolute;
-			width: 2px;
-			height: 2px;
-			background: red;
-			top: -1px;
+			top: -2px;
 			left: 50%;
+			border-left: 2px solid transparent;
+			border-right: 2px solid transparent;
+			border-bottom: 2px solid #ff007f;
 		}
 
 		#imgDisplay {
 			background-color: white;
 			width: 800px;
-			max-width: 100%;
-			height: 60vh;
+			height: 600px;
 			border: 1px solid;
 			text-align: center;
 			margin: 25px auto;
-		}
-
-		#downloadButton {
-			margin: 10px auto 50px auto;
 			display: flex;
 			justify-content: center;
 		}
+
+		button {
+			background-color: #ff007f;
+			color: white;
+			padding: 15px 30px;
+			border: 2px solid black;
+			font-family: "Arial Rounded MT Bold", sans-serif;
+			font-weight: bold;
+			font-size: 20px;
+			border-radius: 10px;
+			cursor: pointer;
+			margin: auto;
+			display: flex;
+			justify-content: center;
+		}
+
+		button:hover {
+			background-color: #cc0059;
+		}
+
+		button:focus {
+			outline: none;
+		}
+
+		button:disabled {
+			background-color: #bbb;
+			cursor: auto;
+		}
+
+		#emojifyButton {
+			width: 650px;
+			max-width: 100%;
+		}
+
+/*		#downloadButton {
+			margin: 10px auto 50px auto;
+			display: flex;
+			justify-content: center;
+		}*/
 	</style>
 </head>
 
@@ -152,20 +216,21 @@
 		<label for="imgInput">choose image</label>
 
 		<div class="rangeWrap">
-			<label for="emojiCountSlider">Emoji count:</label>
+			<label for="emojiCountSlider">emoji count:</label>
 			<input type="range" class="slider" id="emojiCountSlider" min="0" max="4" step="1" value="2">
 			<output for="emojiCountSlider" class="bubble">2000</output>
 		</div>
 
 		<div class="rangeWrap">
-			<label for="emojiSizeSlider">Emoji size:</label>
+			<label for="emojiSizeSlider">emoji size:</label>
 			<input type="range" class="slider" id="emojiSizeSlider" min="0" max="3" step="1" value="2">
 			<output for="emojiSizeSlider" class="bubble">16px</output>
 		</div>
 	</div>
 
-	<div>
-		<button onclick="emojify()">Emojify</button>
+	<button onclick="emojify()" id="emojifyButton" disabled>emojify!</button>
+
+<!-- 	<div>
 
 		<datalist id="count">
 			<option value="0"></option>
@@ -180,10 +245,10 @@
 			<option value="2"></option>
 			<option value="3"></option>
 		</datalist>
-	</div>
+	</div> -->
 
 	<div id="imgDisplay">
-		Image Preview
+		<span style="margin: auto; font-size: 30px">image preview</span>
 	</div>
 
 	<button id="downloadButton" onclick="downloadImage()" disabled>Download</button>
@@ -198,7 +263,7 @@
 			let slider = wrap.querySelector(".slider");
 			let bubble = wrap.querySelector(".bubble");
 			slider.addEventListener("input", () => {
-				updateBubble(slider, bubble);
+				updateBubble(slider, bubble, false);
 			});
 			updateBubble(slider, bubble);
 		});
@@ -207,18 +272,31 @@
 			allRanges.forEach(wrap => {
 				let slider = wrap.querySelector(".slider");
 				let bubble = wrap.querySelector(".bubble");
-				updateBubble(slider, bubble);
+				updateBubble(slider, bubble, true);
 			})
 		})
 
-		function updateBubble(slider, bubble) {
+		function updateBubble(slider, bubble, resize) {
+			// change bubble location
 			var val = countSliderValues[slider.value];
-			let x = (slider.value/slider.max) * (slider.clientWidth-12) + 6;
+			let prop = (slider.value/slider.max);
+			let x = prop * (slider.clientWidth-19) + 11;
 			if (slider.id == "emojiSizeSlider") {
 				val = sizeSliderValues[slider.value] + "px";
 			}
 			bubble.innerHTML = val;
 			bubble.style.left = x + "px";
+
+			// update background color
+			let leftColor = "#ffc83d";
+			let rightColor = "black";
+			let gradient = `linear-gradient(to right, ${leftColor} 0%, ${leftColor} ${prop*100}%, ${rightColor} ${prop*100}%, ${rightColor} 100%)`;
+			slider.style.background = gradient;
+
+			// update display
+			if (!resize) {
+				displayImage();
+			}
 		}
 
 		function displayImage()
@@ -239,12 +317,12 @@
 						let dimensions = getImageSize(image);
 						document.getElementById("imgDisplay").style.width = dimensions[0] + "px";
 						document.getElementById("imgDisplay").style.height = dimensions[1] + "px";
+						document.getElementById("imgDisplay").innerHTML = "";
+						document.getElementById("imgDisplay").appendChild(image);
 						image.style.width = "100%";
 						image.style.height = "100%";
 					}
-
-					document.getElementById("imgDisplay").innerHTML = "";
-					document.getElementById("imgDisplay").appendChild(image);
+					document.getElementById("emojifyButton").disabled = false;
 				}
 			}
 		}
