@@ -155,6 +155,7 @@
 			background-color: white;
 			width: 800px;
 			height: 600px;
+			max-width: 100%;
 			border: 1px solid;
 			text-align: center;
 			margin: 25px auto;
@@ -258,6 +259,11 @@
 		const countSliderValues = [500, 1000, 2000, 4000, 8000];
 		const sizeSliderValues = [4, 8, 16, 32];
 
+		console.log(document.body.clientWidth);
+		if (document.body.clientWidth < 650) {
+			document.getElementById("emojiSizeSlider").value = 1;
+		}
+
 		let allRanges = document.querySelectorAll(".rangeWrap");
 		allRanges.forEach(wrap => {
 			let slider = wrap.querySelector(".slider");
@@ -315,6 +321,7 @@
 					image.src = e.target.result;
 					image.onload = function() {
 						let dimensions = getImageSize(image);
+						document.getElementById("imgDisplay").style.maxWidth = "none";
 						document.getElementById("imgDisplay").style.width = dimensions[0] + "px";
 						document.getElementById("imgDisplay").style.height = dimensions[1] + "px";
 						document.getElementById("imgDisplay").innerHTML = "";
