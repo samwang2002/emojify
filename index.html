@@ -259,7 +259,6 @@
 		const countSliderValues = [500, 1000, 2000, 4000, 8000];
 		const sizeSliderValues = [4, 8, 16, 32];
 
-		console.log(document.body.clientWidth);
 		if (document.body.clientWidth < 650) {
 			document.getElementById("emojiSizeSlider").value = 1;
 		}
@@ -279,6 +278,9 @@
 				let slider = wrap.querySelector(".slider");
 				let bubble = wrap.querySelector(".bubble");
 				updateBubble(slider, bubble, true);
+				if (document.body.clientWidth < 650) {
+					document.getElementById("emojiSizeSlider").value = 1;
+				}
 			})
 		})
 
@@ -420,7 +422,7 @@
 
 				// load reference and draw images
 				const levels = 32;
-				const source = "https://raw.githubusercontent.com/samwang2002/samwang2002.github.io/master/ref.txt";
+				const source = "ref.txt";
 				loadRef(source)
 					.then(ref => loadEmojis(ref, data, levels, function(emoji, count) {
 						const x = emojiSize * (count%canvas.width);
