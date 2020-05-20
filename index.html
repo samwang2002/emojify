@@ -409,7 +409,7 @@
 
 				// load reference and draw images
 				const levels = 32;
-				const source = "ref.txt";
+				const source = "https://raw.githubusercontent.com/samwang2002/emojify/master/ref.txt";
 				loadRef(source)
 					.then(ref => loadEmojis(ref, data, levels, function(emoji, count) {
 						const x = emojiSize * (count%canvas.width);
