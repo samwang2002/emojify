@@ -362,7 +362,6 @@
 		async function loadRef(source)
 		{
 			const lines = await fetch(source).then(response => response.text().then(text => text.split(/\r|\n/)));
-			console.log(lines.length);
 			return lines;
 		}
 
