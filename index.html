@@ -2,10 +2,12 @@
 <html>
 
 <head>
-	<title>emojify</title>
+	<title>emojify - turn images into emoji art</title>
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Turn any image into a mosaic of emojis!">
+	<meta charset="UTF-16">
 </head>
 
 <body>
@@ -35,6 +37,9 @@
 
 	<button onclick="emojify()" id="emojifyButton" disabled>emojify!</button>
 
+	<div id="textDisplay">
+	</div>
+
 	<div id="imgDisplay">
 		<span style="margin: auto; font-size: 30px">image preview</span>
 	</div>
@@ -43,8 +48,8 @@
 
 	<script type="text/javascript">
 
-		const countSliderValues = [500, 1000, 2000, 4000, 8000];
-		const sizeSliderValues = [4, 8, 16, 32];
+		const countSliderValues = [500, 1000, 100, 4000, 8000];
+		const sizeSliderValues = [4, 8, 32, 32];
 
 		if (document.body.clientWidth < 650) {
 			document.getElementById("emojiSizeSlider").value = 1;
@@ -225,9 +230,11 @@
 				const nrefSrc = "https://raw.githubusercontent.com/samwang2002/emojify/master/nref.txt";
 				const crefSrc = "https://raw.githubusercontent.com/samwang2002/emojify/master/cref" + levels + ".bin";
 				var loadedCount = 0;
+				var filenames = [];
 				loadRef(nrefSrc)
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
 					// load emoji
+					filenames[index] = filename;
 					let emoji = new Image();
 					emoji.src = "emojis32x32/" + filename;
 					emoji.onload = function() {
@@ -238,6 +245,7 @@
 						loadedCount++;
 						if (loadedCount == idx.length) {
 							document.getElementById("downloadButton").disabled = false;
+							generateText(filenames, canvas.width);
 						}
 					}
 				}));
@@ -245,7 +253,52 @@
 				// replace image with canvas
 				document.getElementById("imgDisplay").innerHTML = "";
 				document.getElementById("imgDisplay").appendChild(c);
+
+				// emoji as text// add to text
+				
+				// var base = filename.slice(1, filename.length-4);
+				// var sections = base.split(".");
+				// if (sections.length = 1) {
+				// 	emojiText += String.fromCodePoint(parseInt("0x"+sections[0]));
+				// } else {
+				// 	emojiText += String.fromCodePoint(0x25A1);
+				// }
+				// if (index % canvas.width == 0) {
+				// 	emojiText += "<br>";
+				// 	console.log("break");
+				// }
+				
 			};
+		}
+
+		function generateText(filenames, width)
+		{
+			console.log(filenames);
+			var emojiText = "";
+			for (var i = 0; i < filenames.length; i++) {
+				let base = filenames[i].slice(1, filenames[i].length - 4);
+				let sections = base.split(".");
+				if (sections.length = 1) {
+					var code = parseInt("0x" + sections[0]);
+					if (code == 9888) {
+						// error emoji
+						emojiText += "⚠️";
+					} else {
+						let char = String.fromCodePoint(code);
+						emojiText += char;
+					}
+					console.log(i + " " + code);
+				} else {
+					emojiText += String.fromCodePoint(0x25FB);
+				}
+				if ((i+1) % width == 0) {
+					emojiText += "<br>";
+				}
+			}
+			let newWindow = window.open();
+			newWindow.document.body.style.fontFamily = "monospace";
+			newWindow.document.body.style.fontSize = "1.5em";
+			newWindow.document.body.innerHTML = emojiText;
 		}
 
 		function downloadImage()
