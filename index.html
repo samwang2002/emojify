@@ -359,15 +359,6 @@
 			});
 		}
 
-		function getLevels()
-		{
-			let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-			console.log(connection.downlink);
-			console.log(connection.downlinkMax);
-			console.log(connection.type);
-			return 128;
-		}
-
 		function emojify()
 		{
 			// check that files are selected
@@ -411,7 +402,7 @@
 				ctx.fillRect(0, 0, c.width, c.height);
 
 				// array of pixel indices
-				const levels = getLevels();;
+				let levels = 128;
 				var idx = [];
 				for (var i = 0; i < canvas.height; i++) {
 					for (var j = 0; j < canvas.width; j++) {
