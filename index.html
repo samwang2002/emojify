@@ -5,200 +5,6 @@
 	<title>emojify</title>
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<style>
-		/*body {
-			background-color: #ffc83d;
-			padding: 20px;
-			font-family: "Arial Rounded MT Bold", sans-serif;
-			font-weight: bold;
-			font-size: 20px;
-		}
-
-		#header {
-			margin: auto;
-			width: 500px;
-			max-width: 90%;
-			text-align: center;
-			color: #314cb6;
-		}
-
-		#logo {
-			width: 400px;
-			max-width: 100%;
-		}
-
-		#uploadContainer {
-			width: 650px;
-			height: 100px;
-			max-width: 100%;
-			border: 2px solid black;
-			border-radius: 10px;
-			margin: 10px auto;
-			background-color: white;
-			overflow: hidden;
-			display: flex;
-			flex-wrap: nowrap;
-			justify-content: center;
-		}
-
-		@media (max-width: 550px) {
-			#uploadContainer {
-				flex-wrap: wrap;
-				height: 250px;
-			}
-
-			#imgInput + label {
-				width: 100% !important;
-				height: 30px !important;
-				display: inline !important;
-				line-height: 30px;
-				padding: 10px !important;
-				border: none !important;
-			}
-
-			.rangeWrap:first-of-type {
-				top: -22px;
-			}
-
-			.rangeWrap {
-				top: -12px;
-				margin: 12px 30px !important;
-			}
-		}
-
-		#imgInput {
-			width: 0.1px;
-			height: 0.1px;
-			opacity: 0;
-			overflow: hidden;
-			position: absolute;
-			z-index: -1;
-		}
-
-		#imgInput + label {
-			cursor: pointer;
-			background-color: #ff007f;
-			color: white;
-			text-align: center;
-			padding: 30px;
-			display: flex;
-			align-items: center;
-			border-right: 2px solid black;
-		}
-
-		#imgInput + label:hover {
-			background-color: #cc0059;
-		}
-
-		.rangeWrap {
-			position: relative;
-			width: 100%;
-			margin: 8px 30px 8px 25px;
-			text-align: center;
-			padding-top: 5px;
-		}
-
-		.rangeWrap:first-of-type {
-			margin: 8px 25px 8px 30px;
-		}
-
-		.slider {
-			-webkit-appearance: none;
-			appearance: none;
-			width: 100%;
-			height: 10px;
-			border: 2px solid black;
-			border-radius: 10px;
-			background: linear-gradient(to right, red 0%, red 50%, black 50%, black 100%);
-		}
-
-		.slider:focus {
-			outline: none;
-		}
-
-		.slider::-webkit-slider-runnable-track {
-			cursor: pointer;
-		}
-
-		.slider::-webkit-slider-thumb {
-			-webkit-appearance: none;
-			width: 20px;
-			height: 20px;
-			border: 2px solid black;
-			border-radius: 10px;
-			background-color: #ff007f;
-			cursor: pointer;
-		}
-
-		.slider::-webkit-slider-thumb:hover {
-			transform: scale(1.2);
-		}
-
-		.bubble {
-			background: #ff007f;
-			color: white;
-			padding: 4px 8px;
-			position: absolute;
-			border-radius: 4px;
-			transform: translateX(-50%);
-			top: 55px;
-		}
-
-		.bubble::after {
-			content: "";
-			position: absolute;
-			top: -2px;
-			left: 50%;
-			border-left: 2px solid transparent;
-			border-right: 2px solid transparent;
-			border-bottom: 2px solid #ff007f;
-		}
-
-		#imgDisplay {
-			background-color: white;
-			width: 800px;
-			height: 600px;
-			max-width: 100%;
-			border: 2px solid;
-			text-align: center;
-			margin: 25px auto;
-			display: flex;
-			justify-content: center;
-		}
-
-		button {
-			background-color: #ff007f;
-			color: white;
-			padding: 15px 30px;
-			border: 2px solid black;
-			font-family: "Arial Rounded MT Bold", sans-serif;
-			font-weight: bold;
-			font-size: 20px;
-			border-radius: 10px;
-			cursor: pointer;
-			margin: auto;
-			display: flex;
-			justify-content: center;
-		}
-
-		button:hover {
-			background-color: #cc0059;
-		}
-
-		button:focus {
-			outline: none;
-		}
-
-		button:disabled {
-			background-color: #bbb;
-			cursor: auto;
-		}
-
-		#emojifyButton {
-			width: 650px;
-			max-width: 100%;
-		}*/
-	</style>
 </head>
 
 <body>
@@ -234,9 +40,6 @@
 
 	<button id="downloadButton" onclick="downloadImage()" disabled>download</button>
 
-<<<<<<< HEAD
-	<script src="script.js" />
-=======
 	<script type="text/javascript">
 
 		const countSliderValues = [500, 1000, 2000, 4000, 8000];
@@ -362,15 +165,6 @@
 			});
 		}
 
-		function getLevels()
-		{
-			let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-			console.log(connection.downlink);
-			console.log(connection.downlinkMax);
-			console.log(connection.type);
-			return 128;
-		}
-
 		function emojify()
 		{
 			// check that files are selected
@@ -414,7 +208,7 @@
 				ctx.fillRect(0, 0, c.width, c.height);
 
 				// array of pixel indices
-				const levels = getLevels();;
+				const levels = 128;
 				var idx = [];
 				for (var i = 0; i < canvas.height; i++) {
 					for (var j = 0; j < canvas.width; j++) {
@@ -467,7 +261,6 @@
 		}
 
 	</script>
->>>>>>> parent of d7c9f67... Update index.html
 
 </body>
 
