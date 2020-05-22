@@ -2,6 +2,7 @@
 <html>
 
 <head>
+
 	<title>emojify.wtf</title>
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="style.css">
@@ -12,11 +13,14 @@
 	<meta property="og:description" content="Turn any image into a beautiful mosaic of emoji artowrk!">
 	<meta property="og:image" content="https://emojify.wtf/images/thumbnail.png">
 	<meta property="og:url" content="https://emojify.wtf">
+	<meta property="og:type" content="website">
 
 	<meta name="twitter:title" content="emojify.wtf">
 	<meta name="twitter:description" content="Turn any image into a beautiful mosaic of emoji artwork!">
 	<meta name="twitter:image" content="https://emojify.wtf/images/thumbnail-small.png">
 	<meta name="twitter:card" content="https://emojify.wtf/images/thumbnail.png">
+
+	<meta property="fb:app_id" content="520914392129940">
 
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-167169308-1"></script>
 	<script>
@@ -25,6 +29,29 @@
 		gtag('js', new Date());
 		gtag('config', 'UA-167169308-1');
 	</script>
+
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '{your-app-id}',
+				cookie     : true,
+				xfbml      : true,
+				version    : '{api-version}'
+			});
+
+			FB.AppEvents.logPageView();   
+
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+
 </head>
 
 <body>
