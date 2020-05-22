@@ -361,8 +361,10 @@
 
 		function getLevels()
 		{
-			let speed = navigator.connection.downlinkMax;
-			console.log(speed);
+			let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+			console.log(connection.downlink);
+			console.log(connection.downlinkMax);
+			console.log(connection.type);
 			return 128;
 		}
 
