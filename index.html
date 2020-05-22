@@ -4,8 +4,9 @@
 <head>
 	<title>emojify</title>
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<style>
-		body {
+		/*body {
 			background-color: #ffc83d;
 			padding: 20px;
 			font-family: "Arial Rounded MT Bold", sans-serif;
@@ -196,7 +197,7 @@
 		#emojifyButton {
 			width: 650px;
 			max-width: 100%;
-		}
+		}*/
 	</style>
 </head>
 
@@ -358,6 +359,13 @@
 			});
 		}
 
+		function getLevels()
+		{
+			let speed = navigator.connection.type;
+			console.log(speed);
+			return 128;
+		}
+
 		function emojify()
 		{
 			// check that files are selected
@@ -401,7 +409,7 @@
 				ctx.fillRect(0, 0, c.width, c.height);
 
 				// array of pixel indices
-				const levels = 128;
+				const levels = getLevels();;
 				var idx = [];
 				for (var i = 0; i < canvas.height; i++) {
 					for (var j = 0; j < canvas.width; j++) {
@@ -414,8 +422,8 @@
 				}
 
 				// load reference and draw images
-				const nrefSrc = "nref.txt";
-				const crefSrc = "cref128.bin";
+				const nrefSrc = "https://raw.githubusercontent.com/samwang2002/emojify/master/nref.txt";
+				const crefSrc = "https://raw.githubusercontent.com/samwang2002/emojify/master/cref" + levels + ".bin";
 				var loadedCount = 0;
 				loadRef(nrefSrc)
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
@@ -423,6 +431,7 @@
 					let emoji = new Image();
 					emoji.src = "emojis/" + filename;
 					emoji.onload = function() {
+						// draw emoji
 						let x = emojiSize * (index%canvas.width);
 						let y = emojiSize * Math.floor(index/canvas.width);
 						ctx.drawImage(emoji, x, y, emojiSize, emojiSize);
