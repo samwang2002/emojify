@@ -401,7 +401,7 @@
 				ctx.fillRect(0, 0, c.width, c.height);
 
 				// array of pixel indices
-				const levels = 64;
+				const levels = 128;
 				var idx = [];
 				for (var i = 0; i < canvas.height; i++) {
 					for (var j = 0; j < canvas.width; j++) {
@@ -415,7 +415,7 @@
 
 				// load reference and draw images
 				const nrefSrc = "nref.txt";
-				const crefSrc = "cref.bin";
+				const crefSrc = "cref128.bin";
 				var loadedCount = 0;
 				loadRef(nrefSrc)
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
