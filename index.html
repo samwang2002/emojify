@@ -229,7 +229,7 @@
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
 					// load emoji
 					let emoji = new Image();
-					emoji.src = "emojis/" + filename;
+					emoji.src = "emojis32x32/" + filename;
 					emoji.onload = function() {
 						// draw emoji
 						let x = emojiSize * (index%canvas.width);
