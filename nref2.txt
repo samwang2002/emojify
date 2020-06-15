@@ -10,7 +10,6 @@ u1F31A.png
 u1F477.2.W.png
 u1F303.png
 u1F3E8.png
-u1F3FB.png
 u1F465.png
 u2693.png
 u1F317.png
@@ -113,7 +112,6 @@ u2692.png
 u1F316.png
 u1F302.png
 u1F464.png
-u1F3FC.png
 u1F3E9.png
 u1F468_u1F3A4.5.png
 u1F469_u2696.4.png
@@ -256,7 +254,6 @@ u1F482.0.W.png
 u1F4C8.png
 u1F305.png
 u1F463.png
-u1F3FD.png
 u269C.png
 u1F47A.png
 u1F469_u2696.3.png
@@ -387,7 +384,6 @@ u1F468_u1F680.1.png
 u1F304.png
 u1F4C9.png
 u1F486.4.M.png
-u1F3FE.png
 u1F462.png
 u2694.png
 u1F310.png
@@ -508,7 +504,6 @@ u1F4AD.png
 u1F3D8.png
 u2697.png
 u1F9DD.0.W.png
-u1F3FF.png
 u1F461.png
 u1F307.png
 u1F36F.png
