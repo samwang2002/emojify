@@ -255,16 +255,15 @@
 				}
 
 				// load reference and draw images
-				// const nrefSrc = "nref.txt";
-				const nrefSrc = "nref2.txt";
-				//const crefSrc = "cref" + levels + ".bin";
-				const crefSrc = "cref.bin";
+				const nrefSrc = "nref.txt";
+				const crefSrc = "cref" + levels + ".bin";
 				var loadedCount = 0;
 				loadRef(nrefSrc)
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
 					// load emoji
 					let emoji = new Image();
 					emoji.src = "emojis32x32/" + filename;
+					if (filename=="")
 					emoji.onload = function() {
 						// draw emoji
 						let x = emojiSize * (index%canvas.width);
