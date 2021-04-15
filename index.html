@@ -2,7 +2,6 @@
 <html>
 
 <head>
-<<<<<<< HEAD
 
 	<title>emojify.wtf</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
@@ -40,12 +39,11 @@
 		gtag('config', 'UA-167169308-1');
 	</script>
 
-=======
 	<title>emojify</title>
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
->>>>>>> parent of 42711e1... attempt at making emoji text
+
 </head>
 
 <body>
@@ -74,6 +72,9 @@
 	</div>
 
 	<button onclick="emojify()" id="emojifyButton" disabled>emojify!</button>
+
+	<div id="textDisplay">
+	</div>
 
 	<div id="imgDisplay">
 		<span style="margin: auto; font-size: 30px">image preview</span>
@@ -265,9 +266,11 @@
 				const nrefSrc = "nref.txt";
 				const crefSrc = "cref" + levels + ".bin";
 				var loadedCount = 0;
+				var filenames = [];
 				loadRef(nrefSrc)
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
 					// load emoji
+					filenames[index] = filename;
 					let emoji = new Image();
 					emoji.src = "emojis32x32/" + filename;
 					emoji.onload = function() {
@@ -278,6 +281,7 @@
 						loadedCount++;
 						if (loadedCount == idx.length) {
 							document.getElementById("downloadButton").disabled = false;
+							generateText(filenames, canvas.width);
 						}
 					}
 				}));
@@ -286,6 +290,36 @@
 				document.getElementById("imgDisplay").innerHTML = "";
 				document.getElementById("imgDisplay").appendChild(c);
 			};
+		}
+
+		function generateText(filenames, width)
+		{
+			console.log(filenames);
+			var emojiText = "";
+			for (var i = 0; i < filenames.length; i++) {
+				let base = filenames[i].slice(1, filenames[i].length - 4);
+				let sections = base.split(".");
+				if (sections.length = 1) {
+					var code = parseInt("0x" + sections[0]);
+					if (code == 9888) {
+						// error emoji
+						emojiText += "⚠️";
+					} else {
+						let char = String.fromCodePoint(code);
+						emojiText += char;
+					}
+					console.log(i + " " + code);
+				} else {
+					emojiText += String.fromCodePoint(0x25FB);
+				}
+				if ((i+1) % width == 0) {
+					emojiText += "<br>";
+				}
+			}
+			let newWindow = window.open();
+			newWindow.document.body.style.fontFamily = "monospace";
+			newWindow.document.body.style.fontSize = "1.5em";
+			newWindow.document.body.innerHTML = emojiText;
 		}
 
 		function downloadImage()
