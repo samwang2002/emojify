@@ -73,9 +73,6 @@
 
 	<button onclick="emojify()" id="emojifyButton" disabled>emojify!</button>
 
-	<div id="textDisplay">
-	</div>
-
 	<div id="imgDisplay">
 		<span style="margin: auto; font-size: 30px">image preview</span>
 	</div>
@@ -266,11 +263,11 @@
 				const nrefSrc = "nref.txt";
 				const crefSrc = "cref" + levels + ".bin";
 				var loadedCount = 0;
-				var filenames = [];
+				// var filenames = [];
 				loadRef(nrefSrc)
 				.then(ref => getSlices(crefSrc, ref, idx, function(filename, index) {
 					// load emoji
-					filenames[index] = filename;
+					// filenames[index] = filename;
 					let emoji = new Image();
 					emoji.src = "emojis32x32/" + filename;
 					emoji.onload = function() {
@@ -281,7 +278,7 @@
 						loadedCount++;
 						if (loadedCount == idx.length) {
 							document.getElementById("downloadButton").disabled = false;
-							generateText(filenames, canvas.width);
+							// generateText(filenames, canvas.width);
 						}
 					}
 				}));
